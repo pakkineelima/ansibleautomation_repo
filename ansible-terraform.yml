@@ -1,0 +1,11 @@
+---
+
+- hosts: localhost
+  name: Create AWS infrastructure with Terraform
+
+  tasks:
+   - name: Create AWS instance with Terraform
+     terraform:
+        project_path: /home/ec2-user/ansibleautomation_repo/terraform
+        state: present
+     register: output
