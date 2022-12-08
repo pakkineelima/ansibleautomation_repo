@@ -11,6 +11,6 @@ terraform {
 resource "aws_instance" "autoamtion_ins" {
   ami           = "ami-089a545a9ed9893b6"
   instance_type = "t2.micro"
-  key_name      = "myfirstkeypair"
+  key_name      = "********"
   count         = "1"
 }
