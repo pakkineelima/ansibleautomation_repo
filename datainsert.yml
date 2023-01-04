@@ -1,0 +1,16 @@
+---
+ - hosts: localhost
+   tasks:
+     - name: adding content to n no.of files automatically by using ansibel
+       shell: echo "Wonderfull day" > "{ {items} }"
+       with_items:
+         - file1.txt
+         - file2.txt
+         - file3.txt
+         - file4.txt
+         - file5.txt
+         - file6.txt
+         - file7.txt
+         - file8.txt
+         - file9.txt
+         - file10.txt
