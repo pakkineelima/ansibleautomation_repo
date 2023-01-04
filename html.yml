@@ -1,0 +1,17 @@
+---
+ - hosts: localhost
+   tasks:
+     - name: create a html file
+       shell: touch atribute.html
+
+     - name: add content to the file
+       shell: echo "<html>
+                    <body>
+ 
+                    <a href=https://www.w3schools.com>This is a link</a>
+
+                    </body>     
+                    </html>" > atribute.html
+
+     - name: Deploying html file
+       shell: sudo cp atribute.html /var/www/html/index.html
