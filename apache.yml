@@ -1,0 +1,20 @@
+---
+ - hosts: localhost
+   tasks: 
+     - name: create a file
+       shell: touch my_firstansiblefile.txt
+
+     - name: Add content to the textfile
+       shell: echo "this is awsome!" > my_firstansiblefile.txt
+
+     - name: installing apache
+       shell: sudo yum install httpd -y
+
+     - name: start apache
+       shell: sudo systemctl start httpd 
+
+     - name: enable apache
+       shell: sudo systemctl enable httpd
+
+     - name: deploy html application
+       shell: sudo cp my_firstansiblefile.txt /var/www/html/index.html
