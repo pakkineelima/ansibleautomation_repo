@@ -1,0 +1,56 @@
+---
+ - hosts: localhost
+   vars:
+     - ansible_python_interpreter: /usr/local/bin/python
+   tasks:
+     - name: Create an EC2 instance
+       ec2:
+         key_name: nov2022
+         region: us-east-1
+         user_data: |
+             #!/bin/bash
+             sudo yum install git -y
+             sudo yum install java-1.8* -y
+             sudo adduser jenkins`
+         instance_type: t2.micro
+         image: ami-0b5eea76982371e91
+         wait: yes
+         count: 1
+         vpc_subnet_id: subnet-ea4d12cb
+         assign_public_ip: yes
+       register: ec2_output
+
+     - name: Get a time stamp
+       debug:
+         var: ansible_date_time
+
+     - name: Get instance id
+       set_fact:
+         instanceid: "{{ ec2_output.instances | map(attribute='id') | list }}"
+
+     - name: Create an AMI
+       ec2_ami:
+         instance_id: "{{ item }}"
+         wait: yes
+         name: autopilot
+         tags:
+           Name: autopilot
+           Service: TestService
+           dateofcreation: "{{ ansible_date_time.iso8601 }}"
+       with_items: "{{ instanceid }}"
+
+     - name: Get all instance to terminate
+       ec2_instance_info:
+         region: us-east-1
+       register: results
+
+     - name: Grab all instance to terminate
+       set_fact:
+         listofids: "{{ results.instances | map(attribute='instance_id') | list }}"
+
+     - name: Terminate ec2 after instance creation
+       ec2:
+         state: 'absent'
+         region: us-east-1
+         instance_ids: "{{ item }}"
+       with_items: "{{ listofids }}"
